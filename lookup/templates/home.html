@@ -2,7 +2,34 @@
 
 {% block content %}
 
-<h1>Hello World!</h1>
+{% if api == "Error..." %}
+	There was an error, please try again...
+{% else %}
+	<!-- {{ api }} -->
+	<div class="col-md-9">
+		<h2>Area: {{ api.0.ReportingArea }} </h2>
+        <div class="{{ colors.air_quality_color|default_if_none:'bg-light' }} h-100 p-3 border rounded-3 ">
+          <h2>Current Air Quality: {{ api.0.Category.Name }}</h2>
+          <p>Current Air Quality: {{ api.0.AQI }} {{ descriptions.air_quality_description }}</p>
+          
+        </div>
+        {% if visibilities.pm25_visibility == "visible"  %}
+      	<div class=" {{ colors.pm25_quality_color|default_if_none:'bg-light' }} h-100 p-3  rounded-3">
+      		<h2>Current pm2.5 Pollutant Quality: {{ api.1.Category.Name }}</h2>
+      		<p>Current pm2.5 Pollutant Particles: {{ api.1.AQI }} {{ descriptions.pm25_quality_description }}</p>
+      		<p class="info">Particles that are 2.5 microns or smaller are considered especially dangerous to human health because they bypass many of our body’s defenses. </p>
+	    </div>
+	    {% endif %}
+        {% if visibilities.pm10_visibility == "visible" %}
+	    <div class=" {{ colors.pm10_quality_color|default_if_none:'bg-light' }} h-100 p-3 border rounded-3">
+	     	<h2>Current pm10 Pollutant Particles: {{ api.2.Category.Name }}</h2>
+	      	<p>Current pm10 Pollutant Particles: {{ api.2.AQI }} {{ descriptions.pm10_quality_description }}</p>
+	      	<p class="info">PM10 particles are small enough to get into your throat and lungs. High levels of PM10 can make you cough, your nose run and eyes sting. </p>
+	    </div>
+	    {% endif %}
+     </div>
+
+{% endif %}
 
 {% endblock %}
 
